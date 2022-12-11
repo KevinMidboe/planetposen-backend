@@ -1,0 +1,21 @@
+{
+  "vipps": {
+    "apiUrl": "https://apitest.vipps.no",
+    "subKey": "",
+    "clientId": "",
+    "clientSecret": "",
+    "fallbackUrl": "",
+    "callbackPrefix": "",
+    "merchantSerialNumber": null
+  },
+  "stripe": {
+    "publicKey": "",
+    "secretKey": ""
+  },
+  "database": {
+    "user": "planetposen",
+    "password": null,
+    "host": "localhost",
+    "database": "planetposen"
+  }
+}
