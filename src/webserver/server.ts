@@ -1,5 +1,3 @@
-// import * as global from "../types/global";
-import path from "path";
 import express from "express";
 import { createServer } from "http";
 
@@ -28,8 +26,6 @@ app.use(httpContext.middleware);
 app.use(setupCORS);
 app.use(setupHeaders);
 app.use(getOrSetCookieForClient);
-
-// parse application/json
 
 const router = express.Router();
 router.use(express.json());

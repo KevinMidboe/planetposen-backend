@@ -1,5 +1,5 @@
 import cookie from "cookie";
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response } from "express";
 
 const cookieOptions = {
   path: "/",

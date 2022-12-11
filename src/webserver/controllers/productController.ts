@@ -109,7 +109,7 @@ async function addSku(req: Request, res: Response) {
     const skus = await productRepository.getSkus(product_id);
 
     if (!skus.find((sku) => sku.default_price === true)) {
-      const setDefaultResponse = await productRepository.setSkuDefaultPrice(
+      await productRepository.setSkuDefaultPrice(
         product_id,
         skus[skus.length - 1].sku_id
       );

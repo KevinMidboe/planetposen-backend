@@ -1,5 +1,4 @@
 import cookie from "cookie";
-import { ClientRequest } from "http";
 import { WebSocketServer, Websocket, Request } from "ws";
 import WSCart from "../cart/WSCart";
 import CartSession from "../cart/CartSession";
@@ -26,9 +25,9 @@ function setupCartWebsocketServer(server) {
   // setInterval(() => cartSession.listCarts(), 3000);
   setInterval(() => cartSession.removeIfNotAlive(), 1000);
 
-  wss.on("connection", (ws, req) => {
+  wss.on("connection", (ws: Websocket, req: Request) => {
     const sessionId = generateUUID();
-    let clientId =
+    const clientId =
       getCookieValue(req.headers.cookie, "planetId") ||
       getHeaderValue(req.url, "planetId");
 
