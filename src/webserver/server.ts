@@ -6,7 +6,6 @@ import logger from "../logger";
 import { setupCartWebsocketServer } from "./websocketCartServer";
 
 // controllers
-// const TokenController = require(`${__controllers}/tokenController`);
 import OrderController from "./controllers/orderController";
 import ProductController from "./controllers/productController";
 import WarehouseController from "./controllers/warehouseController";
@@ -57,13 +56,6 @@ router.get("/warehouse/:productId", WarehouseController.getProduct);
 
 router.post("/payment/stripe", StripePaymentController.create);
 router.post("/webhook/stripe", StripePaymentController.updatePayment);
-
-// router.get("/api/payment/vipps/token", VippsTokenController);
-// router.get("/api/payment/:id/details", VippsPaymentController.getPaymentDetails);
-// router.post(
-//   "/api/payment/callback/v2/payments/:id",
-//   VippsPaymentController.updatePayment
-// );
 
 router.get("/", (req, res) => res.send("hello"));
 
