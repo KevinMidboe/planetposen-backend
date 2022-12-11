@@ -1,0 +1,39 @@
+[
+  {
+    "model": "cart",
+    "pk": 1,
+    "fields": {
+      "client_id": "800020696e96800f8904ea"
+    }
+  },
+  {
+    "model": "cart_lineitem",
+    "pk": 1,
+    "fields": {
+      "cart_id": 1,
+      "product_no": 2,
+      "product_sku_no": 1,
+      "quantity": 15
+    }
+  },
+  {
+    "model": "cart_lineitem",
+    "pk": 2,
+    "fields": {
+      "cart_id": 1,
+      "product_no": 2,
+      "product_sku_no": 3,
+      "quantity": 4
+    }
+  },
+  {
+    "model": "cart_lineitem",
+    "pk": 3,
+    "fields": {
+      "cart_id": 1,
+      "product_no": 1,
+      "product_sku_no": 1,
+      "quantity": 3
+    }
+  }
+]

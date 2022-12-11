@@ -1,0 +1,198 @@
+[
+  {
+    "model": "product",
+    "pk": 1,
+    "fields": {
+      "name": "Floral",
+      "subtext": "By W.H Auden",
+      "description": "Package include 10 pieces, Choose between A-F Key Value",
+      "image": "https://storage.googleapis.com/planetposen-images/floral.jpg",
+      "primary_color": "#E6E0DC"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 1,
+    "fields": {
+      "product_no": 1,
+      "price": 20.0,
+      "stock": 10,
+      "default_price": true,
+      "size": "Set"
+    }
+  },
+  {
+    "model": "product",
+    "pk": 2,
+    "fields": {
+      "name": "Forrest",
+      "subtext": "By W.H Auden",
+      "description": "Package include 10 pieces, Choose between A-F Key Value",
+      "image": "https://storage.googleapis.com/planetposen-images/forrest.jpg",
+      "primary_color": "#C9B2A9"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 2,
+    "fields": {
+      "product_no": 2,
+      "price": 30,
+      "stock": 10,
+      "size": "Set"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 3,
+    "fields": {
+      "product_no": 2,
+      "price": 50.0,
+      "stock": 10,
+      "default_price": true,
+      "size": "Large"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 4,
+    "fields": {
+      "product_no": 2,
+      "price": 42.0,
+      "stock": 10,
+      "size": "Medium"
+    }
+  },
+  {
+    "model": "product",
+    "pk": 3,
+    "fields": {
+      "name": "Mush",
+      "subtext": "By W.H Auden",
+      "description": "Package include 10 pieces, Choose between A-F Key Value",
+      "image": "https://storage.googleapis.com/planetposen-images/mush.jpg",
+      "primary_color": "#231B1D"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 5,
+    "fields": {
+      "product_no": 3,
+      "price": 30.0,
+      "stock": 10,
+      "default_price": true,
+      "size": "Set"
+    }
+  },
+  {
+    "model": "product",
+    "pk": 4,
+    "fields": {
+      "name": "The Buried Life",
+      "subtext": "By W.H Auden",
+      "description": "Package include 10 pieces, Choose between A-F Key Value",
+      "image": "https://storage.googleapis.com/planetposen-images/the-buried-life.jpg",
+      "primary_color": "#C9B2A9"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 6,
+    "fields": {
+      "product_no": 4,
+      "price": 20.0,
+      "stock": 10,
+      "default_price": true,
+      "size": "Set"
+    }
+  },
+  {
+    "model": "product",
+    "pk": 5,
+    "fields": {
+      "name": "Cookie-Man Forrest",
+      "subtext": "By W.H Auden",
+      "description": "Package include 10 pieces, Choose between A-F Key Value",
+      "image": "https://storage.googleapis.com/planetposen-images/cookie-man-forrest.jpg",
+      "primary_color": "#E6E0DC"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 7,
+    "fields": {
+      "product_no": 5,
+      "price": 45.0,
+      "stock": 10,
+      "default_price": true,
+      "size": "Set"
+    }
+  },
+  {
+    "model": "product",
+    "pk": 6,
+    "fields": {
+      "name": "Yorkshire Shoreline",
+      "subtext": "By W.H Auden",
+      "description": "Package include 10 pieces, Choose between A-F Key Value",
+      "image": "https://storage.googleapis.com/planetposen-images/yorkshire-shoreline.jpg",
+      "primary_color": "#E6E0DC"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 8,
+    "fields": {
+      "product_no": 6,
+      "price": 98.0,
+      "stock": 34,
+      "default_price": true,
+      "size": "Set"
+    }
+  },
+  {
+    "model": "product",
+    "pk": 7,
+    "fields": {
+      "name": "Kneeling in Yemen",
+      "subtext": "By W.H Auden",
+      "description": "Package include 10 pieces, Choose between A-F Key Value",
+      "image": "https://storage.googleapis.com/planetposen-images/kneeling-in-yemen.jpg",
+      "primary_color": "#E6E0DC"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 9,
+    "fields": {
+      "product_no": 7,
+      "price": 78.0,
+      "stock": 10,
+      "default_price": true,
+      "size": "Set"
+    }
+  },
+  {
+    "model": "product",
+    "pk": 8,
+    "fields": {
+      "name": "Spectural Forrest",
+      "subtext": "By W.H Auden",
+      "description": "Package include 10 pieces, Choose between A-F Key Value",
+      "image": "https://storage.googleapis.com/planetposen-images/spectural-forrest.jpg",
+      "primary_color": "#E6E0DC"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 10,
+    "fields": {
+      "product_no": 8,
+      "price": 60.0,
+      "stock": 10,
+      "default_price": true,
+      "size": "Set"
+    }
+  }
+]

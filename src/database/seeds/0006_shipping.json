@@ -1,0 +1,13 @@
+[
+  {
+    "model": "shipping",
+    "pk": 1,
+    "fields": {
+      "shipping_id": 1,
+      "order_id": "fb9a5910-0dcf-4c65-9c25-3fb3eb883ce5",
+      "shipping_company": "Posten BRING",
+      "tracking_code": "CS111111111NO",
+      "tracking_link": "https://sporing.posten.no/sporing/CS111111111NO"
+    }
+  }
+]

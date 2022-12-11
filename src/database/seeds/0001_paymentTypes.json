@@ -1,0 +1,23 @@
+[
+  {
+    "model": "payment_types",
+    "pk": 1,
+    "fields": {
+      "name": "eComm Regular Payment"
+    }
+  },
+  {
+    "model": "payment_types",
+    "pk": 2,
+    "fields": {
+      "name": "eComm Express Payment"
+    }
+  },
+  {
+    "model": "payment_types",
+    "pk": 3,
+    "fields": {
+      "name": "Stripe Card Payment"
+    }
+  }
+]
