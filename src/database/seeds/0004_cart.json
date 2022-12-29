@@ -3,7 +3,7 @@
     "model": "cart",
     "pk": 1,
     "fields": {
-      "client_id": "800020696e96800f8904ea"
+      "planet_id": "800020696e96800f8904ea"
     }
   },
   {

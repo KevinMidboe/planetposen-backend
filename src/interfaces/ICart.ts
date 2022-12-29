@@ -1,5 +1,5 @@
 export default interface ICart {
-  client_id: string;
+  planet_id: string;
   cart_id: number;
   lineitem_id: number;
   quantity: number;

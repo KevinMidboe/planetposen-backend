@@ -1,7 +1,9 @@
 import logger from "../../logger";
 import ProductRepository from "../../product";
-const productRepository = new ProductRepository();
+import { ProductNotFoundError } from "../../errors/product";
 import type { Request, Response } from "express";
+
+const productRepository = new ProductRepository();
 
 async function add(req: Request, res: Response) {
   logger.info("Adding new product");
@@ -25,28 +27,44 @@ async function add(req: Request, res: Response) {
   }
 }
 
-function update(req: Request, res: Response) {
+async function update(req: Request, res: Response) {
   const { product_id } = req.params;
-  logger.info("Updating product", { product_id });
+  const { name, description, subtext, primary_color } = req.body;
+  logger.info("Updating product", {
+    product_id,
+    name,
+    description,
+    subtext,
+    primary_color,
+  });
 
-  return productRepository
-    .get(product_id)
-    .then((product) => {
-      logger.info("Updated product", { product, product_id });
+  try {
+    const product = await productRepository.get(product_id);
+    if (!product) {
+      throw new ProductNotFoundError();
+    }
 
-      res.send({
-        success: true,
-        product: product,
-      });
-    })
-    .catch((error) => {
-      logger.error("Error while updating product", { error, product_id });
-      res.statusCode = error.statusCode || 500;
-      return res.send({
-        success: false,
-        message: error?.message || "Unexpected error while updating product",
-      });
+    await productRepository.updateProduct(
+      product_id,
+      name || product.name,
+      description || product.description,
+      subtext || product.subtext,
+      primary_color || product.primary_color
+    );
+    const updatedProduct = await productRepository.get(product_id);
+    logger.info("Updated product", { product: updatedProduct, product_id });
+
+    res.send({
+      success: true,
+      product: updatedProduct,
     });
+  } catch (error) {
+    logger.error("Error while updating product", { error, product_id });
+    res.status(error.statusCode || 500).send({
+      success: false,
+      message: error?.message || "Unexpected error while updating product",
+    });
+  }
 }
 
 function getAll(req: Request, res: Response) {
@@ -224,6 +242,99 @@ async function setSkuDefaultPrice(req: Request, res: Response) {
   }
 }
 
+async function addImage(req: Request, res: Response) {
+  const { product_id } = req.params;
+  const { url } = req.body;
+  logger.info("Adding new image", { product_id, url });
+
+  try {
+    await productRepository.addImage(product_id, url);
+    let images = await productRepository.getImages(product_id);
+    console.log("found images::::", images);
+
+    if (!images?.find((image) => image.default_image === true)) {
+      await productRepository.setDefaultImage(
+        product_id,
+        images[images.length - 1].image_id
+      );
+
+      images[images.length - 1].default_image = true;
+    }
+
+    logger.info("New images after add", { images, product_id });
+
+    res.send({
+      success: true,
+      product_id,
+      images,
+    });
+  } catch (error) {
+    logger.error("Error adding image", { error, product_id });
+    res.statusCode = error?.statusCode || 500;
+    res.send({
+      success: false,
+      message: error?.message || "Unexpected error while adding new image",
+    });
+  }
+}
+
+async function removeImage(req: Request, res: Response) {
+  const { product_id, image_id } = req.params;
+
+  try {
+    await productRepository.deleteImage(product_id, image_id);
+    const images = await productRepository.getImages(product_id);
+    logger.info("New images after delete", { images, product_id, image_id });
+
+    res.send({
+      success: true,
+      images,
+    });
+  } catch (error) {
+    logger.error("Error deleting image", { product_id, image_id, error });
+    res.statusCode = error?.statusCode || 500;
+
+    res.send({
+      success: false,
+      message: error?.message || "Unexpected error while deleting image",
+    });
+  }
+}
+
+async function setDefaultImage(req: Request, res: Response) {
+  const { product_id, image_id } = req.params;
+  const { url } = req.body;
+  logger.info("Updating new default image", { product_id, image_id });
+
+  try {
+    await productRepository.setDefaultImage(product_id, image_id);
+    let images = await productRepository.getImages(product_id);
+    logger.info("New images after update default image", {
+      images,
+      product_id,
+      image_id,
+    });
+
+    res.send({
+      success: true,
+      product_id,
+      images,
+    });
+  } catch (error) {
+    logger.error("Unexpected error while setting default image", {
+      error,
+      product_id,
+      image_id,
+    });
+    res.statusCode = error?.statusCode || 500;
+    res.send({
+      success: false,
+      message:
+        error?.message || "Unexpected error while adding setting default image",
+    });
+  }
+}
+
 export default {
   add,
   update,
@@ -234,4 +345,7 @@ export default {
   updateSku,
   deleteSku,
   setSkuDefaultPrice,
+  addImage,
+  removeImage,
+  setDefaultImage,
 };

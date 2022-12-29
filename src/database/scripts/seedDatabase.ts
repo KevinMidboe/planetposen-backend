@@ -91,16 +91,22 @@ const readSeedFiles = () => {
   const seedFolder = path.join(__base, "database/seeds/");
   console.log(`Reading seeds from folder: ${seedFolder}\n`);
 
-  return fsPromises
-    .readdir(seedFolder)
-    .then((files) =>
-      files.reverse().map((filePath) => {
+  return fsPromises.readdir(seedFolder).then((files) => {
+    let lastFileRead: string;
+    try {
+      return files.reverse().map((filePath) => {
+        lastFileRead = filePath;
         const seedStep = new SeedStep(path.join(seedFolder, filePath));
         seedStep.readData();
         return seedStep;
-      })
-    )
-    .catch(console.log);
+      });
+    } catch (error) {
+      console.log(
+        `Unexpected error while reading seed files. File: ${lastFileRead} causing error`
+      );
+      throw error;
+    }
+  });
 };
 
 async function runAllSteps(seedSteps) {

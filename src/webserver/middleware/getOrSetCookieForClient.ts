@@ -3,14 +3,14 @@ import generateUUID from "../../utils/generateUUID";
 import httpContext from "express-http-context";
 import type { Request, Response, NextFunction } from "express";
 
-const cookieClientKey = "planetId";
+const cookieClientKey = "planet_id";
 const cookieOptions = {
   path: "/",
   maxAge: 60 * 60 * 24 * 7, // 7 days
 };
 
-function setClientIdCookieHeader(res: Response, value: string) {
-  const setCookie = cookie.serialize("planetId", value, cookieOptions);
+function setplanet_idCookieHeader(res: Response, value: string) {
+  const setCookie = cookie.serialize("planet_id", value, cookieOptions);
   return res.setHeader("Set-Cookie", setCookie);
 }
 
@@ -20,16 +20,16 @@ const getOrSetCookieForClient = (
   next: NextFunction
 ) => {
   const cookies = cookie.parse(req.headers.cookie || "");
-  const planetId = cookies[cookieClientKey];
+  let planet_id = cookies[cookieClientKey];
 
-  if (planetId) {
-    req.planetId = planetId;
-    httpContext.set("planetId", planetId);
+  if (planet_id) {
+    req.planet_id = planet_id;
+    httpContext.set("planet_id", planet_id);
     return next();
   }
 
-  const clientId = generateUUID();
-  setClientIdCookieHeader(res, clientId);
+  planet_id = generateUUID();
+  setplanet_idCookieHeader(res, planet_id);
 
   next();
 };

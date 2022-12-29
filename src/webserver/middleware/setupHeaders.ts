@@ -15,7 +15,7 @@ const mapFeaturePolicyToString = (features) => {
 
 const setupHeaders = (req: Request, res: Response, next: NextFunction) => {
   res.set("Access-Control-Allow-Headers", "Content-Type");
-  res.set("Access-Control-Allow-Methods", "POST, PATCH, DELETE");
+  res.set("Access-Control-Allow-Methods", "POST, PATCH, DELETE, PUT");
 
   // Security
   res.set("X-Content-Type-Options", "nosniff");

@@ -1,0 +1,155 @@
+[
+  {
+    "model": "image",
+    "pk": 1,
+    "fields": {
+      "product_no": 1,
+      "default_image": true,
+      "url": "https://storage.googleapis.com/planetposen-images/floral.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 2,
+    "fields": {
+      "product_no": 2,
+      "default_image": true,
+      "url": "https://storage.googleapis.com/planetposen-images/forrest.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 3,
+    "fields": {
+      "product_no": 3,
+      "default_image": true,
+      "url": "https://storage.googleapis.com/planetposen-images/mush.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 4,
+    "fields": {
+      "product_no": 4,
+      "default_image": true,
+      "url": "https://storage.googleapis.com/planetposen-images/the-buried-life.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 5,
+    "fields": {
+      "product_no": 5,
+      "default_image": true,
+      "url": "https://storage.googleapis.com/planetposen-images/cookie-man-forrest.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 6,
+    "fields": {
+      "product_no": 6,
+      "default_image": true,
+      "url": "https://storage.googleapis.com/planetposen-images/yorkshire-shoreline.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 7,
+    "fields": {
+      "product_no": 7,
+      "default_image": false,
+      "url": "https://storage.googleapis.com/planetposen-images/spectural-forrest.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 8,
+    "fields": {
+      "product_no": 7,
+      "default_image": true,
+      "url": "https://storage.googleapis.com/planetposen-images/kneeling-in-yemen.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 9,
+    "fields": {
+      "product_no": 8,
+      "default_image": true,
+      "url": "https://storage.googleapis.com/planetposen-images/spectural-forrest.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 10,
+    "fields": {
+      "product_no": 9,
+      "default_image": true,
+      "url": "https://storage.googleapis.com/planetposen-images/aef3eb500a6b12b896b7c567b85eded6301d5c4a.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 11,
+    "fields": {
+      "product_no": 9,
+      "default_image": false,
+      "url": "https://storage.googleapis.com/planetposen-images/cc7632566fcda3dc6659b74fd57246f743f4050f.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 12,
+    "fields": {
+      "product_no": 10,
+      "default_image": true,
+      "url": "https://storage.googleapis.com/planetposen-images/838074447f08f03c4b75ac2030dcd01201c0656c.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 13,
+    "fields": {
+      "product_no": 10,
+      "default_image": false,
+      "url": "https://storage.googleapis.com/planetposen-images/76c9ed808f016de3c91fbe28ced51af027fd98b1.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 14,
+    "fields": {
+      "product_no": 10,
+      "default_image": false,
+      "url": "https://storage.googleapis.com/planetposen-images/e84afa63c52194029a89fa5b14542480a5528e12.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 15,
+    "fields": {
+      "product_no": 10,
+      "default_image": false,
+      "url": "https://storage.googleapis.com/planetposen-images/da851171b63d624e5f50c69c8f5a737e49b6b15b.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 16,
+    "fields": {
+      "product_no": 11,
+      "default_image": true,
+      "url": "https://storage.googleapis.com/planetposen-images/2c47ed96b5e061d85f688849b998aa5e76c55c2a.jpg"
+    }
+  },
+  {
+    "model": "image",
+    "pk": 17,
+    "fields": {
+      "product_no": 11,
+      "default_image": false,
+      "url": "https://storage.googleapis.com/planetposen-images/4329b24795654e2c57af859f39081a3891ba695a.jpg"
+    }
+  }
+]

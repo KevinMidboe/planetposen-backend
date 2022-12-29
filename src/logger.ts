@@ -25,7 +25,7 @@ const customLevels = {
 };
 
 const appendPlanetId = winston.format((log) => {
-  log.planetId = httpContext.get("planetId");
+  log.planet_id = httpContext.get("planet_id");
   return log;
 });
 
@@ -39,7 +39,10 @@ const logger = winston.createLogger({
   levels: customLevels.levels,
   transports: [
     new winston.transports.File({
-      filename: "./logs/all-logs.log",
+      filename: "/var/log/planetposen_logs/planetposen-backend.log",
+      maxsize: 100000000, // 100 MB
+      tailable: true,
+      maxFiles: 3,
       format: winston.format.combine(appendPlanetId(), appName(), ecsFormat()),
     }),
   ],

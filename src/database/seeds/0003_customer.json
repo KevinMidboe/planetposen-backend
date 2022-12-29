@@ -3,7 +3,7 @@
     "model": "customer",
     "pk": 1,
     "fields": {
-      "customer_no": "7CB9A6B8-A526-4836-BF4E-67E1075F8B83",
+      "customer_no": "fexQy5Q-UtCgzDxixNw=",
       "email": "kevin.midboe@gmail.com",
       "first_name": "kevin",
       "last_name": "midbøe",
@@ -16,7 +16,7 @@
     "model": "customer",
     "pk": 2,
     "fields": {
-      "customer_no": "FFF49A98-0A2F-437D-9069-9664ADB2FFFE",
+      "customer_no": "JEpfvCBrpxa4c1R7S8E=",
       "email": "Maia.Neteland@gmail.com",
       "first_name": "Maia",
       "last_name": "Neteland",
@@ -29,7 +29,7 @@
     "model": "customer",
     "pk": 3,
     "fields": {
-      "customer_no": "DFC94AB1-9BB6-4ECF-8747-3E12751892AB",
+      "customer_no": "-M_O4M1mvlu5nIVkeZk=",
       "email": "Aksel.Engeset@gmail.com",
       "first_name": "Aksel",
       "last_name": "Engeset",
@@ -42,7 +42,7 @@
     "model": "customer",
     "pk": 4,
     "fields": {
-      "customer_no": "E235456D-C884-4828-BB0F-5065056BD57A",
+      "customer_no": "XNHXUnjFK2Q7bqqbDrU=",
       "email": "Thomas.Langemyr@gmail.com",
       "first_name": "Thomas",
       "last_name": "Langemyr",
@@ -55,7 +55,7 @@
     "model": "customer",
     "pk": 5,
     "fields": {
-      "customer_no": "3C1C1952-87E3-46A8-8B22-383B2F566E26",
+      "customer_no": "Z9NB1MGeb_as6vScolY=",
       "email": "Frida.Nilsen@gmail.com",
       "first_name": "Frida",
       "last_name": "Nilsen",
