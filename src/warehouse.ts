@@ -44,14 +44,18 @@ ORDER BY created`;
 
   all(): Promise<IProductWithSkus[]> {
     const query = `
-  SELECT product.*, variation_count, sum_stock
-  FROM product
-  INNER JOIN (
-    SELECT product_no, count(size) AS variation_count, sum(stock) as sum_stock
-    FROM product_sku
-    GROUP BY product_no
-  ) AS product_sku
-  ON product.product_no = product_sku.product_no`;
+      SELECT product.*, image.url as image, variation_count, sum_stock
+      FROM product
+      LEFT JOIN (
+        SELECT product_no, count(size) AS variation_count, sum(stock) as sum_stock
+        FROM product_sku
+        GROUP BY product_no
+      ) AS product_sku
+      ON product.product_no = product_sku.product_no
+      LEFT JOIN image
+      ON product.product_no = image.product_no
+      WHERE default_image = TRUE
+      ORDER BY product.updated DESC`;
 
     return this.database.all(query);
   }

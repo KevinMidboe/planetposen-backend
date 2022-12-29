@@ -34,14 +34,19 @@ class ProductRepository {
 
   getAllProducts() {
     const query = `
-  SELECT product.*, variations
-  FROM product
-  JOIN (
-    SELECT product_no, count(size) AS variations
-    FROM product_sku
-    GROUP BY product_no
-  ) AS product_sku
-  ON product.product_no = product_sku.product_no`;
+      SELECT product.*, image.url as image, variations
+      FROM product
+      JOIN (
+        SELECT product_no, count(size) AS variations
+        FROM product_sku
+        WHERE unlisted = FALSE
+        GROUP BY product_no
+      ) AS product_sku
+      ON product.product_no = product_sku.product_no
+      LEFT JOIN image
+      ON product.product_no = image.product_no
+      WHERE default_image = TRUE
+      ORDER BY product.updated DESC`;
 
     return this.database.all(query, []);
   }
@@ -51,15 +56,24 @@ class ProductRepository {
     const product = await this.database.get(productQuery, [productId]);
 
     const skuQuery = `
-SELECT sku_id, size, price, stock, default_price, updated, created
-FROM product_sku
-WHERE product_no = $1
-ORDER BY created`;
+      SELECT sku_id, size, price, stock, default_price, updated, created
+      FROM product_sku
+      WHERE product_no = $1 AND unlisted = FALSE
+      ORDER BY created`;
+    const imageQuery = `
+      SELECT image_id, url, default_image
+      FROM image
+      WHERE product_no = $1
+      ORDER BY default_image DESC`;
 
-    const productSkus = await this.database.all(skuQuery, [productId]);
+    const product = await this.database.get(productQuery, [product_no]);
+    const productSkus = await this.database.all(skuQuery, [product_no]);
+    const images = await this.database.all(imageQuery, [product_no]);
+
     return Promise.resolve({
       ...product,
       variations: productSkus,
+      images,
     });
   }
 
@@ -85,24 +99,24 @@ VALUES ($1, $2, $3, $4, $5)
     ]);
   }
 
-  getSkus(productId) {
+  getSkus(product_no) {
     const q = `SELECT sku_id, product_no, price, size, stock, default_price, created, updated
-    FROM product_sku
-    WHERE product_no = $1
-    ORDER BY created`;
+      FROM product_sku
+      WHERE product_no = $1 AND unlisted = FALSE
+      ORDER BY created`;
 
-    return this.database.all(q, [productId]);
+    return this.database.all(q, [product_no]);
   }
 
-  async getSkuStock(skuId) {
+  async getSkuStock(sku_id) {
     const query = "SELECT stock FROM product_sku WHERE sku_id = $1";
-    const stockResponse = await this.database.get(query, [skuId]);
+    const stockResponse = await this.database.get(query, [sku_id]);
     return stockResponse?.stock || null;
   }
 
   // helper
-  async hasQuantityOfSkuInStock(skuId, quantity) {
-    const stock = await this.getSkuStock(skuId);
+  async hasQuantityOfSkuInStock(sku_id, quantity) {
+    const stock = await this.getSkuStock(sku_id);
     if (!stock) return false;
 
     // if requested quantity is less or equal to current stock
