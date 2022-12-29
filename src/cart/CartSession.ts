@@ -15,7 +15,9 @@ class CartSession {
   }
 
   getWSCartByplanet_id(planet_id: string): WSCart {
-    const match = this.carts.find((cart) => cart.wsCart?.planet_id === planet_id);
+    const match = this.carts.find(
+      (cart) => cart.wsCart?.planet_id === planet_id
+    );
     if (!match) return null;
     return match?.wsCart;
   }

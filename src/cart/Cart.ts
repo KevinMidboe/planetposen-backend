@@ -119,6 +119,19 @@ class Cart {
   }
 
   async increment(lineitem_id: number) {
+    const inStockQuery = `
+      SELECT product_sku.stock >= cart_lineitem.quantity + 1 as in_stock
+      FROM product_sku
+      INNER JOIN cart_lineitem
+      ON cart_lineitem.product_sku_no = product_sku.sku_id
+      WHERE cart_lineitem.lineitem_id = $1;`;
+    const inStockResponse = await this.database.get(inStockQuery, [
+      lineitem_id,
+    ]);
+    if (!inStockResponse?.in_stock || inStockResponse?.in_stock === false) {
+      throw Error("Unable to add product, no more left in stock");
+    }
+
     // if (!productRepository.hasQuantityOfSkuInStock(lineitem_id)) {
     //   throw new SkuQuantityNotInStockError("");
     // }
