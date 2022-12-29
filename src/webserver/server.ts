@@ -1,5 +1,3 @@
-// import * as global from "../types/global";
-import path from "path";
 import express from "express";
 import { createServer } from "http";
 
@@ -8,7 +6,6 @@ import logger from "../logger";
 import { setupCartWebsocketServer } from "./websocketCartServer";
 
 // controllers
-// const TokenController = require(`${__controllers}/tokenController`);
 import OrderController from "./controllers/orderController";
 import ProductController from "./controllers/productController";
 import WarehouseController from "./controllers/warehouseController";
@@ -28,8 +25,6 @@ app.use(httpContext.middleware);
 app.use(setupCORS);
 app.use(setupHeaders);
 app.use(getOrSetCookieForClient);
-
-// parse application/json
 
 const router = express.Router();
 router.use(express.json());
@@ -61,13 +56,6 @@ router.get("/warehouse/:productId", WarehouseController.getProduct);
 
 router.post("/payment/stripe", StripePaymentController.create);
 router.post("/webhook/stripe", StripePaymentController.updatePayment);
-
-// router.get("/api/payment/vipps/token", VippsTokenController);
-// router.get("/api/payment/:id/details", VippsPaymentController.getPaymentDetails);
-// router.post(
-//   "/api/payment/callback/v2/payments/:id",
-//   VippsPaymentController.updatePayment
-// );
 
 router.get("/", (req, res) => res.send("hello"));
 

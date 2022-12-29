@@ -1,10 +1,11 @@
+import Stripe from "stripe";
+
+import logger from "../../logger";
 import Configuration from "../../config/configuration";
 import StripeApi from "../../stripe/stripeApi";
 import StripeRepository from "../../stripe/stripeRepository";
 import OrderRepository from "../../order";
 import CustomerRepository from "../../customer";
-
-import Stripe from "stripe";
 
 import type { Request, Response, NextFunction } from "express";
 import type { IOrder, ILineItem } from "../../interfaces/IOrder";
@@ -22,29 +23,62 @@ async function create(req, res) {
   const clientId = req?.planetId;
   const { order_id, customer_no } = req.body;
 
+  logger.info("Creating stripe payment intent", {
+    client_id: clientId,
+    order_id,
+    customer_no,
+  });
+
   if (!order_id || !customer_no) {
+    logger.warning("Missing order_id and/or customer_id");
+
     return res.status(400).send({
       success: false,
       message: "Missing order_id and/or customer_id",
     });
   }
 
-  const order: IOrder = await orderRepository.getOrder(order_id);
-  const customer: ICustomer = await customerRepository.getCustomer(customer_no);
-
-  const sum = order.lineItems?.reduce(
-    (total, lineItem: ILineItem) => total + lineItem.quantity * lineItem.price,
-    0
-  );
-
-  stripeRepository
-    .createPayment(clientId, sum, order_id, customer)
-    .then((clientSecret) =>
-      res.send({
-        success: true,
-        clientSecret,
-      })
+  try {
+    const order: IOrder = await orderRepository.getOrder(order_id);
+    const customer: ICustomer = await customerRepository.getCustomer(
+      customer_no
     );
+
+    const sum = order.lineItems?.reduce(
+      (total, lineItem: ILineItem) =>
+        total + lineItem.quantity * lineItem.price,
+      0
+    );
+
+    stripeRepository
+      .createPayment(clientId, sum, order_id, customer)
+      .then((clientSecret) => {
+        logger.info("New stripe payment", {
+          client_id: clientId,
+          client_secret: clientSecret,
+        });
+
+        res.send({
+          success: true,
+          clientSecret,
+        });
+      });
+  } catch (error) {
+    res.statusCode = error?.statusCode || 500;
+    logger.error("Error creating stripe payment intent", {
+      error,
+      client_id: clientId,
+      customer_no,
+      order_id,
+    });
+
+    res.send({
+      success: false,
+      message:
+        error?.message ||
+        "Unexcepted error while creating stripe payment intent",
+    });
+  }
 }
 
 async function updatePayment(req: Request, res: Response) {

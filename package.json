@@ -6,7 +6,7 @@
     "db:seed": "node lib/database/scripts/seedDatabase",
     "db:teardown": "node lib/database/scripts/teardownDatabase",
     "build:ts": "tsc --project tsconfig.json",
-    "lint": "prettier --plugin-search-dir . --check src",
+    "lint": "prettier --plugin-search-dir . --check src && eslint src",
     "format": "prettier --plugin-search-dir . --write src"
   },
   "dependencies": {
@@ -26,9 +26,11 @@
     "@babel/preset-env": "^7.12.10",
     "@types/express": "^4.17.14",
     "@types/node": "^18.11.5",
-    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/eslint-plugin": "^5.46.0",
     "@typescript-eslint/parser": "^5.41.0",
     "babel-loader": "^8.2.2",
+    "eslint": "^8.29.0",
+    "eslint-config-prettier": "^8.5.0",
     "prettier": "2.2.1"
   }
 }

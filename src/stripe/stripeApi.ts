@@ -57,7 +57,7 @@ class StripeApi {
     });
   }
 
-  createProduct(cart) {
+  createProduct() {
     return;
   }
 
