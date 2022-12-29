@@ -1,8 +1,11 @@
 import logger from "./logger";
 import establishedDatabase from "./database";
+import ShippingRepository from "./shipping";
 import { ORDER_STATUS_CODES } from "./enums/order";
 import type { IOrder } from "./interfaces/IOrder";
 import type { IProduct } from "./interfaces/IProduct";
+
+const shippingRepository = new ShippingRepository();
 
 class MissingOrderError extends Error {
   statusCode: number;
@@ -38,9 +41,8 @@ class OrderRepository {
 
   async newOrder(customer_no: string) {
     const query = `
-      INSERT INTO orders (customer_no) VALUES ($1)
-      RETURNING order_id
-    `;
+      INSERT INTO orders (order_id, customer_no) VALUES (NULL, $1)
+      RETURNING order_id`;
 
     logger.info("Creating order with customer", { customer_no });
     return await this.database.get(query, [customer_no]);
@@ -55,8 +57,7 @@ class OrderRepository {
   ) {
     const query = `
       INSERT INTO orders_lineitem (order_id, product_no, product_sku_no, price, quantity)
-      VALUES ($1, $2, $3, $4, $5)
-    `;
+      VALUES ($1, $2, $3, $4, $5)`;
 
     logger.info("Adding lineitem to order", {
       order_id,
@@ -80,8 +81,7 @@ class OrderRepository {
       FROM orders
       WHERE product_no = $1
       AND NOT status = ''
-      AND end_time > now()
-    `;
+      AND end_time > now()`;
 
     return this.database.all(query, [product.product_no]);
   }
@@ -95,8 +95,7 @@ class OrderRepository {
       AND NOT order_id = $2 
       AND NOT status = $3
       AND NOT status = $4
-      AND NOT status = $5
-    `;
+      AND NOT status = $5`;
 
     return {
       order,
@@ -112,95 +111,88 @@ class OrderRepository {
 
   getAll() {
     const query = `
-SELECT orders.created, orders.order_id, customer.first_name, customer.last_name, customer.email, status, orders_lines.order_sum
-FROM orders
-INNER JOIN (
-  SELECT order_id, SUM(quantity * orders_lineitem.price) as order_sum
-  FROM orders_lineitem
-  INNER JOIN product_sku
-  ON orders_lineitem.product_sku_no = product_sku.sku_id
-  GROUP BY order_id
-) AS orders_lines
-ON orders.order_id = orders_lines.order_id
-INNER JOIN customer
-ON customer.customer_no = orders.customer_no;`;
+      SELECT orders.created, orders.order_id, customer.first_name, customer.last_name, customer.email, status, orders_lines.order_sum
+      FROM orders
+      INNER JOIN customer
+      ON customer.customer_no = orders.customer_no
+      LEFT JOIN (
+        SELECT order_id, SUM(quantity * orders_lineitem.price) as order_sum
+        FROM orders_lineitem
+        INNER JOIN product_sku
+        ON orders_lineitem.product_sku_no = product_sku.sku_id
+        GROUP BY order_id
+      ) AS orders_lines
+      ON orders.order_id = orders_lines.order_id
+      ORDER BY orders.updated DESC;`;
 
     return this.database.all(query, []);
-
-    // SELECT orders.created, orders.order_id, customer.first_name, customer.last_name, customer.email, status, orders_lines.sku_id, orders_lines.quantity, size, price, orders_lines.quantity * price as sum
-    // FROM orders
-    // INNER JOIN (
-    //   SELECT order_id, sku_id, product_sku.product_no, size, orders_lineitem.price, stock, quantity
-    //   FROM orders_lineitem
-    //   INNER JOIN product_sku
-    //   ON orders_lineitem.product_sku_no = product_sku.sku_id
-    // ) AS orders_lines
-    // ON orders.order_id = orders_lines.order_id
-    // INNER JOIN customer
-    // ON customer.customer_no = orders.customer_no;
   }
 
   async getOrderDetailed(orderId) {
     const customerQuery = `
-SELECT customer.*
-FROM orders
-INNER JOIN (
-  SELECT customer_no, email, first_name, last_name,  street_address, zip_code, city
-  FROM customer
-) AS customer
-ON orders.customer_no = customer.customer_no
-WHERE order_id = $1`;
+      SELECT customer.*
+      FROM orders
+      INNER JOIN (
+        SELECT customer_no, email, first_name, last_name,  street_address, zip_code, city
+        FROM customer
+      ) AS customer
+      ON orders.customer_no = customer.customer_no
+      WHERE order_id = $1`;
 
-    // const paymentQuery = ``
+    const paymentQuery = `
+      SELECT 'stripe' as type, stripe_transaction_id, created, updated, stripe_status, amount, amount_received, amount_captured, amount_refunded
+      FROM stripe_payments
+      WHERE order_id = $1`;
 
     const orderQuery = `
-SELECT order_id as orderId, created, updated, status
-FROM orders
-WHERE order_id = $1`;
+      SELECT order_id as orderId, created, updated, status
+      FROM orders
+      WHERE order_id = $1`;
 
     const lineItemsQuery = `
-SELECT product.name, product.image, orders_lineitem.quantity, product_sku.sku_id, product_sku.price, product_sku.size
-FROM orders_lineitem
-INNER JOIN product
-ON orders_lineitem.product_no = product.product_no
-INNER JOIN product_sku
-ON orders_lineitem.product_sku_no = product_sku.sku_id
-WHERE orders_lineitem.order_id = $1`;
+      SELECT product.name, orders_lineitem.quantity, image.url as image, orders_lineitem.price, product_sku.sku_id, product_sku.size
+      FROM orders_lineitem
+      INNER JOIN product
+      ON orders_lineitem.product_no = product.product_no
+      INNER JOIN product_sku
+      ON orders_lineitem.product_sku_no = product_sku.sku_id
+      LEFT JOIN image
+      ON product.product_no = image.product_no
+      WHERE orders_lineitem.order_id = $1 AND image.default_image = TRUE`;
 
-    const shippingQuery = `
-SELECT shipping_company as company, tracking_code, tracking_link, user_notified
-FROM shipping
-WHERE shipping.order_id = $1`;
-
-    const [order, customer, shipping, lineItems] = await Promise.all([
+    const [order, customer, shipping, lineItems, payment] = await Promise.all([
       this.database.get(orderQuery, [orderId]),
       this.database.get(customerQuery, [orderId]),
-      this.database.get(shippingQuery, [orderId]),
+      shippingRepository.getByOrderId(orderId),
       this.database.all(lineItemsQuery, [orderId]),
+      this.database.get(paymentQuery, [orderId]),
     ]);
 
     return {
       ...order,
       customer,
       shipping,
+      payment,
       lineItems,
     };
   }
 
   async getOrder(orderId): Promise<IOrder> {
     const orderQuery = `
-SELECT order_id, customer_no, created, updated, status
-FROM orders
-WHERE order_id = $1`;
+      SELECT order_id, customer_no, created, updated, status
+      FROM orders
+      WHERE order_id = $1`;
 
     const lineItemsQuery = `
-SELECT product.name, product.image, orders_lineitem.quantity, product_sku.sku_id, product_sku.price, product_sku.size
-FROM orders_lineitem
-INNER JOIN product
-ON orders_lineitem.product_no = product.product_no
-INNER JOIN product_sku
-ON orders_lineitem.product_sku_no = product_sku.sku_id
-WHERE orders_lineitem.order_id = $1`;
+      SELECT product.name, image.url as image, orders_lineitem.quantity, product_sku.sku_id, product_sku.price, product_sku.size
+      FROM orders_lineitem
+      INNER JOIN product
+      ON orders_lineitem.product_no = product.product_no
+      INNER JOIN product_sku
+      ON orders_lineitem.product_sku_no = product_sku.sku_id
+      LEFT JOIN image
+      ON product.product_no = image.product_no
+      WHERE orders_lineitem.order_id = $1 AND image.default_image = TRUE`;
 
     const [order, lineItems] = await Promise.all([
       this.database.get(orderQuery, [orderId]),
@@ -346,7 +338,6 @@ WHERE orders_lineitem.order_id = $1`;
   }
 
   reduceSkuInStock(sku_id: number, quantity: number) {
-    console.log("reducing stock for sku_id:", sku_id, quantity);
     const query = `UPDATE product_sku
       SET stock = stock - $2
       WHERE sku_id = $1`;

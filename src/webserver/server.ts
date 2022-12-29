@@ -11,6 +11,7 @@ import ProductController from "./controllers/productController";
 import WarehouseController from "./controllers/warehouseController";
 import StripePaymentController from "./controllers/stripePaymentController";
 import LoginController from "./controllers/loginController";
+import ShipmentController from "./controllers/shipmentController";
 
 // middleware
 import httpContext from "express-http-context";
@@ -50,6 +51,14 @@ router.get("/orders", OrderController.getAll);
 router.post("/order", OrderController.createOrder);
 router.get("/order/:order_id", OrderController.get);
 router.get("/order/:order_id/status", OrderController.getOrderStatus);
+// router.post("/order/:order_id/confirm", adminMiddleware, OrderController.confirmOrder);
+
+router.get("/shipment/couriers", ShipmentController.allCouriers);
+router.get("/shipment/courier/:courier_id", ShipmentController.getCourier);
+router.get("/shipment/:shipment_id", ShipmentController.get);
+router.get("/shipment/:shipment_id/track", ShipmentController.track);
+router.post("/shipment/:order_id", ShipmentController.create);
+router.put("/shipment/:shipment_id", ShipmentController.update);
 
 router.get("/warehouse", WarehouseController.getAll);
 router.get("/warehouse/:productId", WarehouseController.getProduct);

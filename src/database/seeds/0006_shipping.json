@@ -1,13 +1,55 @@
 [
   {
-    "model": "shipping",
-    "pk": 1,
+    "model": "shipment_courier",
+    "pk": 100001,
     "fields": {
-      "shipping_id": 1,
-      "order_id": "fb9a5910-0dcf-4c65-9c25-3fb3eb883ce5",
-      "shipping_company": "Posten BRING",
+      "shipment_courier_id": 100001,
+      "name": "Posten BRING",
+      "website": "http://posten.no",
+      "has_api": true
+    }
+  },
+  {
+    "model": "shipment_courier",
+    "pk": 100002,
+    "fields": {
+      "shipment_courier_id": 100002,
+      "name": "HeltHjem",
+      "website": "http://helthjem.no",
+      "has_api": false
+    }
+  },
+  {
+    "model": "shipment",
+    "pk": 100001,
+    "fields": {
+      "shipment_id": 100001,
+      "order_id": "ok4jI9EehsRLDHlS6cU=",
+      "courier_id": 100001,
       "tracking_code": "CS111111111NO",
       "tracking_link": "https://sporing.posten.no/sporing/CS111111111NO"
+    }
+  },
+  {
+    "model": "shipment",
+    "pk": 100002,
+    "fields": {
+      "shipment_id": 100002,
+      "order_id": "XTMt-bSA_wQnwfam5KM=",
+      "courier_id": 100001,
+      "tracking_code": "LS395378164NL",
+      "tracking_link": "https://sporing.posten.no/sporing/LS395378164NL"
+    }
+  },
+  {
+    "model": "shipment",
+    "pk": 100003,
+    "fields": {
+      "shipment_id": 100003,
+      "order_id": "0upJLUYPEYaOCeQMxPc=",
+      "courier_id": 100001,
+      "tracking_code": "LW138879799DE",
+      "tracking_link": "https://sporing.posten.no/sporing/LW138879799DE"
     }
   }
 ]
