@@ -3,12 +3,11 @@ import OrderRepository from "../../order";
 import CustomerRepository from "../../customer";
 import ProductRepository from "../../product";
 import WarehouseRepository from "../../warehouse";
-import Cart from "../../cart/Cart";
 
 import ICustomer from "../../interfaces/ICustomer";
 
 import { validEmail } from "../../utils/formValidation";
-import ICart from "../../interfaces/ICart";
+import type ICart from "../../interfaces/ICart";
 
 const orderRepository = new OrderRepository();
 const customerRepository = new CustomerRepository();

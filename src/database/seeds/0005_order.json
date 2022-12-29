@@ -58,5 +58,65 @@
       "price": 30,
       "quantity": 1
     }
+  },
+  {
+    "model": "orders",
+    "pk": 3,
+    "fields": {
+      "order_id": "ezN6SQ6I5EEtSgCKmxE=",
+      "customer_no": "-M_O4M1mvlu5nIVkeZk=",
+      "status": "REFUNDED"
+    }
+  },
+  {
+    "model": "orders_lineitem",
+    "pk": 5,
+    "fields": {
+      "order_id": "ezN6SQ6I5EEtSgCKmxE=",
+      "product_no": 2,
+      "product_sku_no": 2,
+      "price": 30,
+      "quantity": 1
+    }
+  },
+  {
+    "model": "orders",
+    "pk": 4,
+    "fields": {
+      "order_id": "XTMt-bSA_wQnwfam5KM=",
+      "customer_no": "XNHXUnjFK2Q7bqqbDrU=",
+      "status": "CONFIRMED"
+    }
+  },
+  {
+    "model": "orders_lineitem",
+    "pk": 6,
+    "fields": {
+      "order_id": "XTMt-bSA_wQnwfam5KM=",
+      "product_no": 7,
+      "product_sku_no": 9,
+      "price": 78,
+      "quantity": 2
+    }
+  },
+  {
+    "model": "orders",
+    "pk": 5,
+    "fields": {
+      "order_id": "0upJLUYPEYaOCeQMxPc=",
+      "customer_no": "JEpfvCBrpxa4c1R7S8E=",
+      "status": "CONFIRMED"
+    }
+  },
+  {
+    "model": "orders_lineitem",
+    "pk": 7,
+    "fields": {
+      "order_id": "0upJLUYPEYaOCeQMxPc=",
+      "product_no": 6,
+      "product_sku_no": 8,
+      "price": 98,
+      "quantity": 2
+    }
   }
 ]

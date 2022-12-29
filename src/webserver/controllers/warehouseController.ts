@@ -30,15 +30,15 @@ function getAll(req: Request, res: Response) {
 }
 
 function getProduct(req: Request, res: Response) {
-  const { productId } = req.params;
-  logger.info("Fetching warehouse product", { product_id: productId });
+  const { product_id } = req.params;
+  logger.info("Fetching warehouse product", { product_id });
 
   return warehouseRepository
-    .getProduct(productId)
+    .getProduct(product_id)
     .then((product) => {
       logger.info("Found warehouse product", {
         product,
-        product_id: productId,
+        product_id,
       });
 
       res.send({
@@ -49,7 +49,7 @@ function getProduct(req: Request, res: Response) {
     .catch((error) => {
       logger.error("Error fetching warehouse product:", {
         error,
-        product_id: productId,
+        product_id,
       });
       res.statusCode = error.statusCode || 500;
 

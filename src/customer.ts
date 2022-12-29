@@ -11,8 +11,8 @@ class CustomerRepository {
 
   newCustomer(customer: ICustomer) {
     const query = `
-      INSERT INTO customer (email, first_name, last_name, street_address, zip_code, city)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO customer (customer_no, email, first_name, last_name, street_address, zip_code, city)
+      VALUES (NULL, $1, $2, $3, $4, $5, $6)
       RETURNING customer_no
     `;
 
@@ -47,21 +47,3 @@ class CustomerRepository {
 }
 
 export default CustomerRepository;
-
-// ```
-// SELECT products.*
-// FROM products
-// INNER JOIN orders_lineitem
-// ON products.product_no = orders_lineitem.product_no
-// WHERE order_id = 'fb9a5910-0dcf-4c65-9c25-3fb3eb883ce5';
-
-// SELECT orders.*
-// FROM orders
-// WHERE order_id = 'fb9a5910-0dcf-4c65-9c25-3fb3eb883ce5';
-
-// SELECT customer.*
-// FROM customer
-// INNER JOIN orders
-// ON customer.customer_no = orders.customer_no
-// WHERE order_id = 'fb9a5910-0dcf-4c65-9c25-3fb3eb883ce5';
-// ```;
