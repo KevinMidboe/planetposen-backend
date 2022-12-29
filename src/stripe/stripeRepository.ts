@@ -2,6 +2,7 @@ import establishedDatabase from "../database";
 import Configuration from "../config/configuration";
 import StripeApi from "./stripeApi";
 import Stripe from "stripe";
+import logger from "../logger";
 import type ICustomer from "../interfaces/ICustomer";
 
 const configuration = Configuration.getInstance();
@@ -66,17 +67,24 @@ class StripeRepository {
   }
 
   async createPayment(
-    clientId: string,
+    planet_id: string,
     total: number,
     orderId: string,
     customer: ICustomer
   ) {
     const paymentIntent = await stripeApi.createPaymentIntent(
-      clientId,
+      planet_id,
       total,
       orderId,
       customer
     );
+
+    logger.info("Payment intent from stripe", {
+      payment_intent: paymentIntent,
+      planet_id,
+      order_id: orderId,
+      customer_no: customer.customer_no,
+    });
 
     return this.commitPaymentToDatabase(orderId, paymentIntent).then(
       () => paymentIntent.client_secret

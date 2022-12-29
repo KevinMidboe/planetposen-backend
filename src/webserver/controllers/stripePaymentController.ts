@@ -20,11 +20,11 @@ const orderRepository = new OrderRepository();
 const customerRepository = new CustomerRepository();
 
 async function create(req, res) {
-  const clientId = req?.planetId;
+  const planet_id = req?.planet_id;
   const { order_id, customer_no } = req.body;
 
   logger.info("Creating stripe payment intent", {
-    client_id: clientId,
+    planet_id,
     order_id,
     customer_no,
   });
@@ -51,10 +51,10 @@ async function create(req, res) {
     );
 
     stripeRepository
-      .createPayment(clientId, sum, order_id, customer)
+      .createPayment(planet_id, sum, order_id, customer)
       .then((clientSecret) => {
         logger.info("New stripe payment", {
-          client_id: clientId,
+          planet_id,
           client_secret: clientSecret,
         });
 
@@ -67,7 +67,7 @@ async function create(req, res) {
     res.statusCode = error?.statusCode || 500;
     logger.error("Error creating stripe payment intent", {
       error,
-      client_id: clientId,
+      planet_id,
       customer_no,
       order_id,
     });

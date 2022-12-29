@@ -1,25 +1,23 @@
 import establishedDatabase from "../database";
-
 import ProductRepository from "../product";
-
 import type { IProduct } from "../interfaces/IProduct";
 import type IDeliveryAddress from "../interfaces/IDeliveryAddress";
 
 const productRepository = new ProductRepository();
 
 class Cart {
-  clientId: string;
+  planet_id: string;
   database: any;
 
-  constructor(clientId: string) {
-    this.clientId = clientId;
+  constructor(planet_id: string) {
+    this.planet_id = planet_id;
     this.database = establishedDatabase;
   }
 
   async get(): Promise<Array<object>> {
     const query =
-      "SELECT * FROM cart_detailed WHERE client_id = $1 ORDER BY lineitem_id";
-    return this.database.all(query, [this.clientId]);
+      "SELECT * FROM cart_detailed WHERE planet_id = $1 ORDER BY lineitem_id";
+    return this.database.all(query, [this.planet_id]);
   }
 
   async getLineItem(product_sku_no: number) {
@@ -30,30 +28,30 @@ class Cart {
       AND cart_id = (
         SELECT cart_id
         FROM cart
-        WHERE client_id = $1
+        WHERE planet_id = $1
       )
     `;
 
-    return this.database.get(query, [this.clientId, product_sku_no]);
+    return this.database.get(query, [this.planet_id, product_sku_no]);
   }
 
   async exists() {
     const query = `
       SELECT cart_id
       FROM cart
-      WHERE client_id = $1
+      WHERE planet_id = $1
     `;
 
-    const exists = await this.database.get(query, [this.clientId]);
+    const exists = await this.database.get(query, [this.planet_id]);
     return exists !== undefined;
   }
 
   create() {
     const query = `
-      INSERT INTO cart (client_id) values ($1) ON CONFLICT DO NOTHING
+      INSERT INTO cart (planet_id) values ($1) ON CONFLICT DO NOTHING
     `;
 
-    return this.database.update(query, [this.clientId]);
+    return this.database.update(query, [this.planet_id]);
   }
 
   async add(product_no: number, product_sku_no: number, quantity: number) {
@@ -68,7 +66,7 @@ class Cart {
         (
           SELECT cart_id
           FROM cart
-          WHERE client_id = $1
+          WHERE planet_id = $1
         ),
         $2,
         $3,
@@ -86,13 +84,13 @@ class Cart {
         AND cart_id = (
           SELECT cart_id
           FROM cart
-          WHERE client_id = $1
+          WHERE planet_id = $1
         )
       `;
     }
 
     return this.database.update(query, [
-      this.clientId,
+      this.planet_id,
       product_no,
       product_sku_no,
       quantity,
@@ -100,7 +98,7 @@ class Cart {
   }
 
   remove(lineitem_id: number) {
-    // TODO should match w/ cart.client_id
+    // TODO should match w/ cart.planet_id
     const query = `
       DELETE FROM cart_lineitem
       WHERE lineitem_id = $1
@@ -110,7 +108,7 @@ class Cart {
   }
 
   decrement(lineitem_id: number) {
-    // TODO should match w/ cart.client_id
+    // TODO should match w/ cart.planet_id
     const query = `
       UPDATE cart_lineitem
       SET quantity = quantity - 1
@@ -124,7 +122,7 @@ class Cart {
     // if (!productRepository.hasQuantityOfSkuInStock(lineitem_id)) {
     //   throw new SkuQuantityNotInStockError("");
     // }
-    // TODO should match w/ cart.client_id
+    // TODO should match w/ cart.planet_id
     const query = `
       UPDATE cart_lineitem
       SET quantity = quantity + 1
@@ -141,8 +139,8 @@ class Cart {
   removeItem(item: IProduct) {}
 
   destroy() {
-    const query = `DELETE FROM chart WHERE client_id = $1`;
-    this.database.update(query, [this.clientId]);
+    const query = `DELETE FROM cart WHERE planet_id = $1`;
+    this.database.update(query, [this.planet_id]);
   }
 }
 

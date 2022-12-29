@@ -19,12 +19,12 @@ class StripeApi {
   }
 
   async createPaymentIntent(
-    clientId: string,
+    planet_id: string,
     total: number,
     orderId: string,
     customer: ICustomer
   ): Promise<Stripe.Response<Stripe.PaymentIntent>> {
-    const stripeCustomer = await this.createCustomer(clientId, customer);
+    const stripeCustomer = await this.createCustomer(planet_id, customer);
     const paymentIntent = await this.stripe.paymentIntents.create({
       customer: stripeCustomer?.id,
       amount: total * 100,
@@ -34,7 +34,7 @@ class StripeApi {
         address: stripeCustomer.address,
       },
       metadata: {
-        clientId,
+        planet_id,
         orderId,
       },
     });
@@ -42,7 +42,7 @@ class StripeApi {
     return paymentIntent;
   }
 
-  async createCustomer(clientId: string, customer: ICustomer) {
+  async createCustomer(planet_id: string, customer: ICustomer) {
     return await this.stripe.customers.create({
       email: customer.email,
       name: `${customer.first_name} ${customer.last_name}`,
@@ -52,7 +52,7 @@ class StripeApi {
         postal_code: String(customer.zip_code),
       },
       metadata: {
-        clientId,
+        planet_id,
       },
     });
   }

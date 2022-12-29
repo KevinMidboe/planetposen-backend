@@ -27,13 +27,13 @@ function setupCartWebsocketServer(server) {
 
   wss.on("connection", (ws: Websocket, req: Request) => {
     const sessionId = generateUUID();
-    const clientId =
-      getCookieValue(req.headers.cookie, "planetId") ||
-      getHeaderValue(req.url, "planetId");
+    const planet_id =
+      getCookieValue(req.headers.cookie, "planet_id") ||
+      getHeaderValue(req.url, "planet_id");
 
-    if (clientId === null) return;
+    if (planet_id === null) return;
 
-    const wsCart = new WSCart(ws, clientId);
+    const wsCart = new WSCart(ws, planet_id);
     wsCart.cartSession = cartSession;
     cartSession.add(sessionId, wsCart);
 

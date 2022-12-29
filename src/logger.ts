@@ -25,7 +25,7 @@ const customLevels = {
 };
 
 const appendPlanetId = winston.format((log) => {
-  log.planetId = httpContext.get("planetId");
+  log.planet_id = httpContext.get("planet_id");
   return log;
 });
 

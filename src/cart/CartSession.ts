@@ -14,15 +14,15 @@ class CartSession {
     this.carts = [];
   }
 
-  getWSCartByClientId(clientId: string): WSCart {
-    const match = this.carts.find((cart) => cart.wsCart?.clientId === clientId);
+  getWSCartByplanet_id(planet_id: string): WSCart {
+    const match = this.carts.find((cart) => cart.wsCart?.planet_id === planet_id);
     if (!match) return null;
     return match?.wsCart;
   }
 
   add(sessionId: string, cart: WSCart) {
     console.log(
-      `adding session ${sessionId} with cart id: ${cart?.cart?.clientId}`
+      `adding session ${sessionId} with cart id: ${cart?.cart?.planet_id}`
     );
     this.carts.push({ wsCart: cart, sessionId });
   }
@@ -40,13 +40,13 @@ class CartSession {
   }
 
   async emitChangeToClients(wsCart: WSCart) {
-    const { clientId } = wsCart;
+    const { planet_id } = wsCart;
 
     const matchingCarts = this.carts.filter(
-      (cart) => cart.wsCart.clientId === clientId
+      (cart) => cart.wsCart.planet_id === planet_id
     );
     console.log(
-      `emit change to all carts with id ${clientId}:`,
+      `emit change to all carts with id ${planet_id}:`,
       matchingCarts.length
     );
 
@@ -68,7 +68,7 @@ class CartSession {
     this.carts.forEach((cart: IGlobalCart) => {
       console.table({
         isAlive: cart.wsCart?.isAlive,
-        clientId: cart.wsCart?.clientId,
+        planet_id: cart.wsCart?.planet_id,
         sessionId: cart?.sessionId,
         hasCart: cart.wsCart?.cart !== null,
       });

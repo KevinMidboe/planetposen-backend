@@ -37,14 +37,14 @@ interface ICartPayload {
 
 class WSCart {
   ws: WebSocket;
-  clientId: string | null;
+  planet_id: string | null;
   cart: Cart;
   cartSession: CartSession;
 
-  constructor(ws, clientId) {
+  constructor(ws, planet_id) {
     this.ws = ws;
-    this.clientId = clientId;
-    this.cart = new Cart(clientId);
+    this.planet_id = planet_id;
+    this.cart = new Cart(planet_id);
     this.cartSession;
   }
 
@@ -127,6 +127,7 @@ class WSCart {
     } catch (error) {
       // ????
       if (error.message) this.message(error?.message, false);
+      this.cartSession.emitChangeToClients(this);
     }
   }
 
