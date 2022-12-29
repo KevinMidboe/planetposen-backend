@@ -39,23 +39,28 @@ class StripeRepository {
   updatePaymentIntent(payload: Stripe.Response<Stripe.PaymentIntent>) {
     const query = `
       UPDATE stripe_payments
-      SET stripe_status = $2, amount_received = $3, updated = $4
+      SET stripe_status = $2, amount_received = $3, updated = $4, stripe_payment_response = $5
       WHERE order_id = $1`;
+
+    logger.info("Updating stripe payment intent", { payment_intent: payload });
 
     return this.database.update(query, [
       payload.metadata.orderId,
       payload.status,
       payload.amount_received,
       new Date(),
+      payload,
     ]);
   }
 
   updatePaymentCharge(payload: Stripe.Response<Stripe.Charge>) {
     const query = `
       UPDATE stripe_payments
-      SET stripe_status = $2, amount_captured = $3, amount_refunded = $4, updated = $5
+      SET stripe_status = $2, amount_captured = $3, amount_refunded = $4, updated = $5, stripe_charge_response = $6
       WHERE order_id = $1
     `;
+
+    logger.info("Updating stripe payment charge", { payment_charge: payload });
 
     return this.database.update(query, [
       payload.metadata.orderId,
@@ -63,6 +68,7 @@ class StripeRepository {
       payload.amount_captured,
       payload.amount_refunded,
       new Date(),
+      payload,
     ]);
   }
 
