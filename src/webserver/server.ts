@@ -73,7 +73,7 @@ router.post("/webhook/stripe", StripePaymentController.updatePayment);
 
 router.get("/", (req, res) => res.send("hi"));
 
-app.use("/api", router);
+app.use("/api/v1", router);
 
 const server = createServer(app);
 server.listen(port, () => logger.info(`Server started, listening at :${port}`));
