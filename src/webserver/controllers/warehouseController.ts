@@ -57,9 +57,31 @@ function getProduct(req: Request, res: Response) {
         success: false,
         message:
           error?.message ||
-          `Unexpected error while fetching product with id: ${productId}`,
+          `Unexpected error while fetching product with id: ${product_id}`,
       });
     });
 }
 
-export default { getAll, getProduct };
+function getProductAudit(req: Request, res: Response) {
+  const { product_id } = req.params;
+  logger.info("Fetching audit logs for product", { product_id });
+
+  return warehouseRepository
+    .getProductAudit(product_id)
+    .then((auditLogs) =>
+      res.send({
+        success: true,
+        logs: auditLogs,
+      })
+    )
+    .catch((error) => {
+      logger.error("Unexpected error while fetching product audit log", error);
+
+      res.status(error?.statusCode || 500).send({
+        success: false,
+        message: "Unexpected error while fetching product audit log",
+      });
+    });
+}
+
+export default { getAll, getProduct, getProductAudit };

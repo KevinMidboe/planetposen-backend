@@ -1,5 +1,8 @@
 import establishedDatabase from "./database";
 import type { IProductWithSkus } from "./interfaces/IProduct";
+import ProductRepository from "./product";
+
+const productRepository = new ProductRepository();
 
 // interface IProductSku {
 //   id: string
@@ -26,20 +29,19 @@ class WarehouseRepository {
   }
 
   async getProduct(productId): Promise<IProductWithSkus> {
-    const productQuery = `SELECT * FROM product WHERE product_no = $1`;
-    const product = await this.database.get(productQuery, [productId]);
+    return productRepository.get(productId);
+  }
 
-    const skuQuery = `
-SELECT sku_id, size, price, stock, default_price, updated, created
-FROM product_sku
-WHERE product_no = $1
-ORDER BY created`;
+  async getProductAudit(productId) {
+    const query = `
+      SELECT table_name, row_data, changed_fields
+      FROM audit.logged_actions
+      WHERE table_name = 'product'
+      ORDER BY action_tstamp_stm DESC`;
 
-    const productSkus = await this.database.all(skuQuery, [productId]);
-    return Promise.resolve({
-      ...product,
-      variations: productSkus,
-    });
+    // TODO need to filter by product_id
+
+    return this.database.all(query, []);
   }
 
   all(): Promise<IProductWithSkus[]> {
@@ -73,20 +75,18 @@ ORDER BY created`;
 
   createWarehouseProduct(skuId, stock) {
     const query = `
-  INSERT INTO
-  warehouse (product_sku_id, stock)
-  VALUES ($1, $2)
-  `;
+      INSERT INTO
+      warehouse (product_sku_id, stock)
+      VALUES ($1, $2)`;
 
     return this.database.update(query, [skuId, stock]);
   }
 
   updateWarehouseProductSkuStock(skuId, stock) {
     const query = `
-  UPDATE warehouse
-  SET stock = $1, updated = to_timestamp($2 / 1000.0)
-  WHERE product_sku_id = $3
-  `;
+      UPDATE warehouse
+      SET stock = $1, updated = to_timestamp($2 / 1000.0)
+      WHERE product_sku_id = $3`;
 
     return this.database.update(query, [stock, new Date(), skuId]);
   }
@@ -95,9 +95,9 @@ ORDER BY created`;
     const sqlStatus = status ? "TRUE" : "FALSE";
 
     const query = `
-  UPDATE warehouse
-  SET enabled = $1, updated = to_timestamp($2 / 1000.0)
-  WHERE product_sku_id = $3`;
+      UPDATE warehouse
+      SET enabled = $1, updated = to_timestamp($2 / 1000.0)
+      WHERE product_sku_id = $3`;
 
     return this.database.query(query, [sqlStatus, new Date(), skuId]);
   }

@@ -62,10 +62,11 @@ router.post("/shipment/:order_id", ShipmentController.create);
 router.put("/shipment/:shipment_id", ShipmentController.update);
 
 router.get("/warehouse", WarehouseController.getAll);
-router.get("/warehouse/:productId", WarehouseController.getProduct);
-// router.get("/api/order/:id", OrderController.getOrderById);
-// router.post("/api/order/:id/cancel", OrderController.cancelOrder);
-// router.post("/api/order/:id/extend", OrderController.extendOrder);
+router.get("/warehouse/:product_id", WarehouseController.getProduct);
+router.get("/warehouse/:product_id/audit", WarehouseController.getProductAudit);
+// router.get("/order/:id", OrderController.getOrderById);
+// router.post("/order/:id/cancel", OrderController.cancelOrder);
+// router.post("/order/:id/extend", OrderController.extendOrder);
 
 router.post("/payment/stripe", StripePaymentController.create);
 router.post("/webhook/stripe", StripePaymentController.updatePayment);
