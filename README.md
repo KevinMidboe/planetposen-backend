@@ -3,7 +3,7 @@
 Backend api of planetposen webshop. View frontend at: [kevinmidboe/planetposen-frontend](https://github.com/kevinmidboe/planetposen-frontend)
 
 Also uses the following supplementary go apps:
- - image proxy  : [kevinmidboe/planetposen-images](https://github.com/kevinmidboe/planetposen-image)
+ - image proxy  : [kevinmidboe/planetposen-images](https://github.com/kevinmidboe/planetposen-images)
  - email sender : [kevinmidboe/planetposen-mail](https://github.com/kevinmidboe/planetposen-mail)
 
 ## Install
