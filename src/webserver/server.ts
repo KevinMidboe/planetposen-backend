@@ -44,9 +44,15 @@ router.post(
   "/product/:product_id/sku/:sku_id/default",
   ProductController.setSkuDefaultPrice
 );
-router.post("/product/:product_id/image", ProductController.addImage)
-router.delete("/product/:product_id/image/:image_id", ProductController.removeImage)
-router.post("/product/:product_id/image/:image_id/default", ProductController.setDefaultImage)
+router.post("/product/:product_id/image", ProductController.addImage);
+router.delete(
+  "/product/:product_id/image/:image_id",
+  ProductController.removeImage
+);
+router.post(
+  "/product/:product_id/image/:image_id/default",
+  ProductController.setDefaultImage
+);
 
 router.get("/orders", OrderController.getAll);
 router.post("/order", OrderController.createOrder);
