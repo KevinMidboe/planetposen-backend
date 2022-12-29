@@ -6,6 +6,7 @@ import StripeApi from "../../stripe/stripeApi";
 import StripeRepository from "../../stripe/stripeRepository";
 import OrderRepository from "../../order";
 import CustomerRepository from "../../customer";
+import EmailRepository from "../../email";
 
 import type { Request, Response, NextFunction } from "express";
 import type { IOrder, ILineItem } from "../../interfaces/IOrder";
@@ -18,6 +19,7 @@ const stripeApi = new StripeApi(stripePublicKey, stripeSecretKey);
 const stripeRepository = new StripeRepository();
 const orderRepository = new OrderRepository();
 const customerRepository = new CustomerRepository();
+const emailRepository = new EmailRepository();
 
 async function create(req, res) {
   const planet_id = req?.planet_id;
@@ -92,28 +94,36 @@ async function updatePayment(req: Request, res: Response) {
   }
 
   if (!orderId) {
-    console.log("no order_id found in webhook, nothing to do");
+    logger.warning("no order_id found in webhook from stripe, nothing to do", {
+      stripe_webhook_type: type,
+      [type]: object,
+    });
     return res.status(200).send("ok");
   }
 
   if (type === "payment_intent.created") {
     console.log("handle payment intent created... doing nothing");
   } else if (type === "payment_intent.succeeded") {
-    console.log("handle payment succeeded", object);
     await stripeRepository.updatePaymentIntent(object);
-    orderRepository.confirmOrder(orderId);
+    await orderRepository.confirmOrder(orderId);
+    const { customer, lineItems } = await orderRepository.getOrderDetailed(
+      orderId
+    );
+    await emailRepository.sendConfirmation(orderId, customer, lineItems);
   } else if (type === "payment_intent.payment_failed") {
     console.log("handle payment failed", object);
     await stripeRepository.updatePaymentIntent(object);
-    orderRepository.cancelOrder(orderId);
+    await orderRepository.cancelOrder(orderId);
   } else if (type === "charge.succeeded") {
-    console.log("handle charge succeeded", object);
     await stripeRepository.updatePaymentCharge(object);
   } else if (type === "charge.refunded") {
-    console.log("handle charge refunded", object);
     await stripeRepository.updatePaymentCharge(object);
     await orderRepository.refundOrder(orderId);
   } else {
+    logger.warning("unhandled webhook from stripe", {
+      stripe_webhook_type: type,
+      [type]: object,
+    });
     console.log(`webhook for ${type}, not setup yet`);
   }
 
