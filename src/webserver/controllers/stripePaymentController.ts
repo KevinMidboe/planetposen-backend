@@ -82,7 +82,6 @@ async function create(req, res) {
 }
 
 async function updatePayment(req: Request, res: Response) {
-  console.log("STRIPE WEBHOOK body:", req.body);
   const { type, data } = req.body;
   const { object } = data;
   const { orderId } = object?.metadata;

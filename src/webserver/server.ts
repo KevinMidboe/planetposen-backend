@@ -36,11 +36,12 @@ router.post("/logout", LoginController.logout);
 router.get("/products", ProductController.getAll);
 router.post("/product", ProductController.add);
 router.get("/product/:product_id", ProductController.getById);
+router.put("/product/:product_id", ProductController.update);
 router.post("/product/:product_id/sku", ProductController.addSku);
-router.patch("/product/:product_id/sku/:sku_id", ProductController.updateSku);
+router.put("/product/:product_id/sku/:sku_id", ProductController.updateSku);
 router.delete("/product/:product_id/sku/:sku_id", ProductController.deleteSku);
 router.post(
-  "/product/:product_id/sku/:sku_id/default_price",
+  "/product/:product_id/sku/:sku_id/default",
   ProductController.setSkuDefaultPrice
 );
 router.post("/product/:product_id/image", ProductController.addImage)
@@ -69,7 +70,7 @@ router.get("/warehouse/:productId", WarehouseController.getProduct);
 router.post("/payment/stripe", StripePaymentController.create);
 router.post("/webhook/stripe", StripePaymentController.updatePayment);
 
-router.get("/", (req, res) => res.send("hello"));
+router.get("/", (req, res) => res.send("hi"));
 
 app.use("/api", router);
 

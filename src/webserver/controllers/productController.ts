@@ -1,7 +1,9 @@
 import logger from "../../logger";
 import ProductRepository from "../../product";
-const productRepository = new ProductRepository();
+import { ProductNotFoundError } from "../../errors/product";
 import type { Request, Response } from "express";
+
+const productRepository = new ProductRepository();
 
 async function add(req: Request, res: Response) {
   logger.info("Adding new product");
@@ -25,28 +27,44 @@ async function add(req: Request, res: Response) {
   }
 }
 
-function update(req: Request, res: Response) {
+async function update(req: Request, res: Response) {
   const { product_id } = req.params;
-  logger.info("Updating product", { product_id });
+  const { name, description, subtext, primary_color } = req.body;
+  logger.info("Updating product", {
+    product_id,
+    name,
+    description,
+    subtext,
+    primary_color,
+  });
 
-  return productRepository
-    .get(product_id)
-    .then((product) => {
-      logger.info("Updated product", { product, product_id });
+  try {
+    const product = await productRepository.get(product_id);
+    if (!product) {
+      throw new ProductNotFoundError();
+    }
 
-      res.send({
-        success: true,
-        product: product,
-      });
-    })
-    .catch((error) => {
-      logger.error("Error while updating product", { error, product_id });
-      res.statusCode = error.statusCode || 500;
-      return res.send({
-        success: false,
-        message: error?.message || "Unexpected error while updating product",
-      });
+    await productRepository.updateProduct(
+      product_id,
+      name || product.name,
+      description || product.description,
+      subtext || product.subtext,
+      primary_color || product.primary_color
+    );
+    const updatedProduct = await productRepository.get(product_id);
+    logger.info("Updated product", { product: updatedProduct, product_id });
+
+    res.send({
+      success: true,
+      product: updatedProduct,
     });
+  } catch (error) {
+    logger.error("Error while updating product", { error, product_id });
+    res.status(error.statusCode || 500).send({
+      success: false,
+      message: error?.message || "Unexpected error while updating product",
+    });
+  }
 }
 
 function getAll(req: Request, res: Response) {

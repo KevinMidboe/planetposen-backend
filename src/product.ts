@@ -9,16 +9,14 @@ class ProductRepository {
 
   async add(
     name = "foo",
-    description = "foo",
-    image = "/static/no-product.png",
-    subtext = "foo",
-    primary_color = "foo"
+    description = "foo baz",
+    subtext = "foo bar",
+    primary_color = "#E6E0DC"
   ) {
     const query = `
-  INSERT INTO
-  product (name, description, image, subtext, primary_color)
-  VALUES ($1, $2, $3, $4, $5)
-    `;
+      INSERT INTO
+      product (name, description, subtext, primary_color)
+      VALUES ($1, $2, $3, $4)`;
 
     await this.database.update(query, [
       name,
@@ -27,8 +25,8 @@ class ProductRepository {
       primary_color,
     ]);
 
-    const productIdQuery = `SELECT currval('product_product_no_seq')`;
-    const productCurrVal = await this.database.get(productIdQuery, []);
+    const productNumberQuery = `SELECT currval('product_product_no_seq')`;
+    const productCurrVal = await this.database.get(productNumberQuery, []);
     return productCurrVal.currval;
   }
 
@@ -51,10 +49,8 @@ class ProductRepository {
     return this.database.all(query, []);
   }
 
-  async get(productId) {
+  async get(product_no) {
     const productQuery = `SELECT * FROM product WHERE product_no = $1`;
-    const product = await this.database.get(productQuery, [productId]);
-
     const skuQuery = `
       SELECT sku_id, size, price, stock, default_price, updated, created
       FROM product_sku
@@ -78,20 +74,19 @@ class ProductRepository {
   }
 
   async addSku(
-    productId,
+    product_no,
     price = 10,
     size = "",
     stock = 0,
     defaultPrice = false
   ) {
     const query = `
-INSERT INTO
-product_sku (product_no, price, size, stock, default_price)
-VALUES ($1, $2, $3, $4, $5)
-`;
+      INSERT INTO
+      product_sku (product_no, price, size, stock, default_price)
+      VALUES ($1, $2, $3, $4, $5)`;
 
     return this.database.update(query, [
-      productId,
+      product_no,
       price,
       size,
       stock,
@@ -145,51 +140,41 @@ VALUES ($1, $2, $3, $4, $5)
     ]);
   }
 
-  updateSku(productId, skuId, stock = 0, size = 0, price = 10) {
+  updateSku(product_no, sku_id, stock = 0, size = 0, price = 10) {
     const query = `
-UPDATE product_sku
-SET
-  price = $1,
-  size = $2,
-  stock = $3,
-  updated = to_timestamp($4 / 1000.0)
-WHERE product_no = $5 and sku_id = $6`;
-
-    console.log("update sql:", query, [
-      price,
-      size,
-      stock,
-      new Date().getTime(),
-      productId,
-      skuId,
-    ]);
+      UPDATE product_sku
+      SET
+        price = $1,
+        size = $2,
+        stock = $3,
+        updated = to_timestamp($4 / 1000.0)
+      WHERE product_no = $5 and sku_id = $6`;
 
     return this.database.update(query, [
       price,
       size,
       stock,
       new Date().getTime(),
-      productId,
-      skuId,
+      product_no,
+      sku_id,
     ]);
   }
 
-  async setSkuDefaultPrice(productId, skuId) {
+  async setSkuDefaultPrice(product_no, sku_id) {
     const resetOld = `
-UPDATE product_sku
-SET default_price = false, updated = to_timestamp($1 / 1000.0)
-WHERE product_no = $2 and default_price = true`;
+      UPDATE product_sku
+      SET default_price = false, updated = to_timestamp($1 / 1000.0)
+      WHERE product_no = $2 and default_price = true`;
     const setNew = `
-UPDATE product_sku
-SET default_price = true, updated = to_timestamp($1 / 1000.0)
-WHERE product_no = $2 AND sku_id = $3
-`;
+      UPDATE product_sku
+      SET default_price = true, updated = to_timestamp($1 / 1000.0)
+      WHERE product_no = $2 AND sku_id = $3`;
 
-    await this.database.update(resetOld, [new Date().getTime(), productId]);
+    await this.database.update(resetOld, [new Date().getTime(), product_no]);
     await this.database.update(setNew, [
       new Date().getTime(),
-      productId,
-      skuId,
+      product_no,
+      sku_id,
     ]);
   }
 
