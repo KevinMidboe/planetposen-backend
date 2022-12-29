@@ -224,6 +224,99 @@ async function setSkuDefaultPrice(req: Request, res: Response) {
   }
 }
 
+async function addImage(req: Request, res: Response) {
+  const { product_id } = req.params;
+  const { url } = req.body;
+  logger.info("Adding new image", { product_id, url });
+
+  try {
+    await productRepository.addImage(product_id, url);
+    let images = await productRepository.getImages(product_id);
+    console.log("found images::::", images);
+
+    if (!images?.find((image) => image.default_image === true)) {
+      await productRepository.setDefaultImage(
+        product_id,
+        images[images.length - 1].image_id
+      );
+
+      images[images.length - 1].default_image = true;
+    }
+
+    logger.info("New images after add", { images, product_id });
+
+    res.send({
+      success: true,
+      product_id,
+      images,
+    });
+  } catch (error) {
+    logger.error("Error adding image", { error, product_id });
+    res.statusCode = error?.statusCode || 500;
+    res.send({
+      success: false,
+      message: error?.message || "Unexpected error while adding new image",
+    });
+  }
+}
+
+async function removeImage(req: Request, res: Response) {
+  const { product_id, image_id } = req.params;
+
+  try {
+    await productRepository.deleteImage(product_id, image_id);
+    const images = await productRepository.getImages(product_id);
+    logger.info("New images after delete", { images, product_id, image_id });
+
+    res.send({
+      success: true,
+      images,
+    });
+  } catch (error) {
+    logger.error("Error deleting image", { product_id, image_id, error });
+    res.statusCode = error?.statusCode || 500;
+
+    res.send({
+      success: false,
+      message: error?.message || "Unexpected error while deleting image",
+    });
+  }
+}
+
+async function setDefaultImage(req: Request, res: Response) {
+  const { product_id, image_id } = req.params;
+  const { url } = req.body;
+  logger.info("Updating new default image", { product_id, image_id });
+
+  try {
+    await productRepository.setDefaultImage(product_id, image_id);
+    let images = await productRepository.getImages(product_id);
+    logger.info("New images after update default image", {
+      images,
+      product_id,
+      image_id,
+    });
+
+    res.send({
+      success: true,
+      product_id,
+      images,
+    });
+  } catch (error) {
+    logger.error("Unexpected error while setting default image", {
+      error,
+      product_id,
+      image_id,
+    });
+    res.statusCode = error?.statusCode || 500;
+    res.send({
+      success: false,
+      message:
+        error?.message || "Unexpected error while adding setting default image",
+    });
+  }
+}
+
 export default {
   add,
   update,
@@ -234,4 +327,7 @@ export default {
   updateSku,
   deleteSku,
   setSkuDefaultPrice,
+  addImage,
+  removeImage,
+  setDefaultImage,
 };

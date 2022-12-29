@@ -6,7 +6,6 @@
       "name": "Floral",
       "subtext": "By W.H Auden",
       "description": "Package include 10 pieces, Choose between A-F Key Value",
-      "image": "https://storage.googleapis.com/planetposen-images/floral.jpg",
       "primary_color": "#E6E0DC"
     }
   },
@@ -28,7 +27,6 @@
       "name": "Forrest",
       "subtext": "By W.H Auden",
       "description": "Package include 10 pieces, Choose between A-F Key Value",
-      "image": "https://storage.googleapis.com/planetposen-images/forrest.jpg",
       "primary_color": "#C9B2A9"
     }
   },
@@ -70,7 +68,6 @@
       "name": "Mush",
       "subtext": "By W.H Auden",
       "description": "Package include 10 pieces, Choose between A-F Key Value",
-      "image": "https://storage.googleapis.com/planetposen-images/mush.jpg",
       "primary_color": "#231B1D"
     }
   },
@@ -92,7 +89,6 @@
       "name": "The Buried Life",
       "subtext": "By W.H Auden",
       "description": "Package include 10 pieces, Choose between A-F Key Value",
-      "image": "https://storage.googleapis.com/planetposen-images/the-buried-life.jpg",
       "primary_color": "#C9B2A9"
     }
   },
@@ -114,7 +110,6 @@
       "name": "Cookie-Man Forrest",
       "subtext": "By W.H Auden",
       "description": "Package include 10 pieces, Choose between A-F Key Value",
-      "image": "https://storage.googleapis.com/planetposen-images/cookie-man-forrest.jpg",
       "primary_color": "#E6E0DC"
     }
   },
@@ -136,7 +131,6 @@
       "name": "Yorkshire Shoreline",
       "subtext": "By W.H Auden",
       "description": "Package include 10 pieces, Choose between A-F Key Value",
-      "image": "https://storage.googleapis.com/planetposen-images/yorkshire-shoreline.jpg",
       "primary_color": "#E6E0DC"
     }
   },
@@ -158,7 +152,6 @@
       "name": "Kneeling in Yemen",
       "subtext": "By W.H Auden",
       "description": "Package include 10 pieces, Choose between A-F Key Value",
-      "image": "https://storage.googleapis.com/planetposen-images/kneeling-in-yemen.jpg",
       "primary_color": "#E6E0DC"
     }
   },
@@ -180,7 +173,6 @@
       "name": "Spectural Forrest",
       "subtext": "By W.H Auden",
       "description": "Package include 10 pieces, Choose between A-F Key Value",
-      "image": "https://storage.googleapis.com/planetposen-images/spectural-forrest.jpg",
       "primary_color": "#E6E0DC"
     }
   },
@@ -193,6 +185,80 @@
       "stock": 10,
       "default_price": true,
       "size": "Set"
+    }
+  },
+  {
+    "model": "product",
+    "pk": 9,
+    "fields": {
+      "name": "Dino Camping",
+      "subtext": "Snuggle Flannel Fabric",
+      "description": " - Width: 43 inches\n - Content: 100% Cotton\n - Care: Machine wash normal cold, no bleach, tumble dry, do not iron\n - Imported",
+      "primary_color": "#E6E0DC"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 11,
+    "fields": {
+      "product_no": 9,
+      "price": 150.0,
+      "stock": 14,
+      "default_price": true,
+      "size": "Set"
+    }
+  },
+  {
+    "model": "product",
+    "pk": 10,
+    "fields": {
+      "name": "White Dinosaur Patches",
+      "subtext": "",
+      "description": "The power of cotton is an almighty force for kids attire. Our cotton spandex interlock is a thicker fabric that's durable and naturally comfortable. Plus with breathability and slight stretch, children's tops and dresses are free-moving during play time. Choose from various designs like this dinosaur patch pattern, and you have a loving sewing project for awesome practicality and personality.\n\n - Width: 57 Inches\n - Content: 98% Cotton 2% Spandex\n - Care: Machine wash gentle cold, nonchlorine bleach, line dry, cool iron.\n - Imported",
+      "primary_color": "#B1E0DC"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 12,
+    "fields": {
+      "product_no": 10,
+      "price": 99.0,
+      "stock": 14,
+      "default_price": true,
+      "size": "Medium"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 13,
+    "fields": {
+      "product_no": 10,
+      "price": 140.0,
+      "stock": 4,
+      "default_price": false,
+      "size": "Large"
+    }
+  },
+  {
+    "model": "product",
+    "pk": 11,
+    "fields": {
+      "name": "Oversized Blue And Yellow Swirls",
+      "subtext": "",
+      "description": " - 44'' Fabric by the Yard\n - 100% Cottton\n - Fabric Care: Machine Wash Normal, No Bleach, Tumble Dry Low\n - Printed in the USA from Imported Material.",
+      "primary_color": "#E6E0DC"
+    }
+  },
+  {
+    "model": "product_sku",
+    "pk": 14,
+    "fields": {
+      "product_no": 11,
+      "price": 34.0,
+      "stock": 8,
+      "default_price": true,
+      "size": "Small"
     }
   }
 ]

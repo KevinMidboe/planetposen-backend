@@ -2,11 +2,19 @@ CREATE TABLE IF NOT EXISTS product (
   product_no    serial PRIMARY KEY,
   name          text,
   description   text,
-  image         text,
   subtext       text,
   primary_color text,
   created       timestamp DEFAULT CURRENT_TIMESTAMP,
   updated       timestamp DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS image (
+  image_id        serial PRIMARY KEY,
+  product_no      integer REFERENCES product,
+  url             text,
+  default_image   boolean DEFAULT FALSE,
+  created         timestamp DEFAULT CURRENT_TIMESTAMP,
+  updated         timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS product_sku (
